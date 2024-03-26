@@ -3,8 +3,9 @@
 const sampleJobs = [
     // Your sample job objects here
     {
-        id: 1,
+        id: '1',
         emploi: 'Software Engineer',
+        lien : 'https://www.linkedin.com/mynetwork/',
         date: '2022-02-01',
         ville: 'City1',
         site: 'Company1',
@@ -12,8 +13,9 @@ const sampleJobs = [
         status: 'Applied',
       },
       {
-        id: 2,
+        id: '2',
         emploi: 'Data Scientist',
+        lien : 'https://www.linkedin.com/mynetwork/',
         date: '2022-02-02',
         ville: 'City2',
         site: 'Company2',
@@ -21,8 +23,9 @@ const sampleJobs = [
         status: 'Interview Scheduled',
       },
       {
-        id: 3,
+        id: '3',
         emploi: 'UX Designer',
+        lien : 'https://www.linkedin.com/mynetwork/',
         date: '2022-02-03',
         ville: 'City3',
         site: 'Company3',

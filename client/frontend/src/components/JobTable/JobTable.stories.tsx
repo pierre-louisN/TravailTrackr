@@ -7,7 +7,9 @@ export default {
   title: "JobTable",
 };
 
-export const Default = () => <JobTable jobs={sampleJobs} />;
+export const Default = () => (
+  <JobTable jobs={sampleJobs} searchTerm="" /> // Provide an empty string as the default search term
+);
 
 Default.story = {
   name: 'default',

@@ -1,4 +1,3 @@
-// SearchBar.tsx
 import React, { useState } from 'react';
 import { SearchBarWrapper } from './SearchBar.styled';
 
@@ -12,6 +11,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   // Function to handle input change and trigger search
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
+    console.log(e.target.value);
     onSearch(e.target.value); // Call the onSearch callback with the current search term
   };
 
@@ -20,7 +20,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
       {/* Render your search input */}
       <input
         type="text"
-        placeholder="Search by Emploi..."
+        placeholder="Search ..."
         value={searchTerm}
         onChange={handleChange}
       />

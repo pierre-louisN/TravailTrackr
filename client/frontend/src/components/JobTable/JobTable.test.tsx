@@ -23,11 +23,11 @@ describe('<JobTable />', () => {
   test('it should mount', () => {
     // Define a mock jobs array
     const mockJobs = [
-      { id: 1, emploi: 'Developer', date: '2022-02-01', ville: 'City', site: 'Site', versionCV: '1.0', status: 'Active' },
+      { id: '1', emploi: 'Developer', lien : 'https://www.linkedin.com/mynetwork/', date: '2022-02-01', ville: 'City', site: 'Site', versionCV: '1.0', status: 'Active' },
       // Add more job objects as needed
     ];
 
-    render(<JobTable jobs={mockJobs} />);
+    render(<JobTable jobs={mockJobs} searchTerm="" />);
     
     const jobTable = screen.getByTestId('JobTable');
 
