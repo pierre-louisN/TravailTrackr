@@ -11,7 +11,19 @@ interface JobItemProps {
 
 const JobItem: React.FC<JobItemProps> = ({ job, onDelete }) => {
 
-  const navigate = useNavigate();
+  const openCVLink = (cvVersion: string) => {
+    // Define the links for each CV version
+    const cvLinks: { [key: string]: string } = {
+      'Version 1': 'https://fr.overleaf.com/project/65b03dd68a8bbd5e0ae74eec',
+      'Version 2': 'https://fr.overleaf.com/project/65b0443c72e325a8ec0d7b8a', // Replace with your link for Version 2
+      // Add more CV versions and their links as needed
+    };
+
+    // Open the link for the selected CV version in a new tab
+    if (cvLinks[cvVersion]) {
+      window.open(cvLinks[cvVersion], '_blank');
+    }
+  };
   
   const formattedDate = new Date(job.date).toLocaleDateString('fr-FR', {
     day: '2-digit',
@@ -49,7 +61,9 @@ const JobItem: React.FC<JobItemProps> = ({ job, onDelete }) => {
       <td>{formattedDate}</td>
       <td>{job.ville}</td>
       <td>{job.site}</td>
-      <td>{job.versionCV}</td>
+      <td onClick={() => openCVLink(job.versionCV)} style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}>
+        {job.versionCV}
+      </td>
       <td>{job.status}</td>
       <td>
         <button onClick={handleDeleteClick}>Delete</button>

@@ -11,11 +11,7 @@ interface JobListProps {
 
 const JobList: React.FC<JobListProps> = ({ jobs, onSubmit, onDelete }) => {
 
-  // const [formData, setFormData] = useState<Partial<Job>>({}); // State for form data
-  
-  const [isSubmitting, setIsSubmitting] = useState(false); // State for form submission status
-  // const [jobs, setJobs] = useState<Job[]>([]); // State for jobs fetched from server
-  const [currentDate, setCurrentDate] = useState(new Date().toISOString().slice(0, 10));
+   const [currentDate, setCurrentDate] = useState(new Date().toISOString().slice(0, 10));
   const [isEditingDate, setIsEditingDate] = useState(false); // State to track if date is being edited
   const initialDate = new Date().toISOString().slice(0, 10); // Get today's date in the required format
   const [formData, setFormData] = useState<Partial<Job>>({
@@ -28,13 +24,28 @@ const JobList: React.FC<JobListProps> = ({ jobs, onSubmit, onDelete }) => {
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     if (name === 'date') {
-      if (e.target) {
+      if (e.target) { 
         setInputValue(e.target.value);
         console.log(e.target.value)
       }
       console.log(value)
       setCurrentDate(value); // Update the current date directly
       setFormData({ ...formData, [name]: value }); // Update other fields in the form data
+    }else if (name === 'lien') {
+      // Update the lien field with the entered value
+      setFormData(prevData => ({ ...prevData, lien: value }));
+      
+      try {
+        // Extract the domain from the URL
+        const url = new URL(value);
+        const site = url.hostname;
+  
+        // Update the site field with the extracted domain
+        setFormData(prevData => ({ ...prevData, site }));
+      } catch (error) {
+        // Handle invalid URLs
+        console.error('Invalid URL:', value);
+      } 
     } else {
       setFormData({ ...formData, [name]: value }); // Update other fields in the form data
     }
