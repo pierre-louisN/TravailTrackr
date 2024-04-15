@@ -16,7 +16,7 @@ const JobList: React.FC<JobListProps> = ({ jobs, onSubmit, onDelete }) => {
   const initialDate = new Date().toISOString().slice(0, 10); // Get today's date in the required format
   const [formData, setFormData] = useState<Partial<Job>>({
     date: initialDate,
-    versionCV: 'Version 1', // Set default value for versionCV
+    versionCV: 'version1', // Set default value for versionCV
     status: 'Envoye', // Set default value for status
   });
   const [inputValue, setInputValue] = useState('');
@@ -75,7 +75,7 @@ const JobList: React.FC<JobListProps> = ({ jobs, onSubmit, onDelete }) => {
     handleDateBlur();
     setFormData({ 
       date: initialDate,
-      versionCV: 'Version 1', // Set default value for versionCV
+      versionCV: 'version1', // Set default value for versionCV
       status: 'Envoye' // Set default value for status
     }); // Reset the defautl values   
   };
@@ -130,9 +130,9 @@ const JobList: React.FC<JobListProps> = ({ jobs, onSubmit, onDelete }) => {
           <td><input type="text" name="ville" placeholder="Ville" value={formData.ville || ''} onChange={handleInputChange} required /></td>
           <td><input type="text" name="site" placeholder="Site" value={formData.site || ''} onChange={handleInputChange} required /></td>
           <td>
-            <select name="versionCV" value={formData.versionCV || 'Version 1'} onChange={handleInputChange}>
-              <option value="Version 1">Version 1</option>
-              <option value="Version 2">Version 2</option>
+            <select name="versionCV" value={formData.versionCV || 'version1'} onChange={handleInputChange}>
+              <option value="version1">Version 1</option>
+              <option value="version2">Version 2</option>
               {/* Add more versions as needed */}
             </select>
           </td>

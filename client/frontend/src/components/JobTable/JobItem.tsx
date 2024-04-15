@@ -1,30 +1,52 @@
 import React from 'react';
 import { Job } from './JobModel';
-import { Link, useNavigate } from 'react-router-dom'; // Import Link from react-router-dom
-
-
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import axios from 'axios';
 
 interface JobItemProps {
   job: Job;
   onDelete: (id: string) => void;
 }
 
+
 const JobItem: React.FC<JobItemProps> = ({ job, onDelete }) => {
 
-  const openCVLink = (cvVersion: string) => {
-    // Define the links for each CV version
-    const cvLinks: { [key: string]: string } = {
-      'Version 1': 'https://fr.overleaf.com/project/65b03dd68a8bbd5e0ae74eec',
-      'Version 2': 'https://fr.overleaf.com/project/65b0443c72e325a8ec0d7b8a', // Replace with your link for Version 2
-      // Add more CV versions and their links as needed
-    };
 
-    // Open the link for the selected CV version in a new tab
-    if (cvLinks[cvVersion]) {
-      window.open(cvLinks[cvVersion], '_blank');
+  const downloadCV = async (cvVersion: string) => {
+    try {
+      // Make a GET request to the backend route to download the CV
+      const response = await axios.get(`/api/download-cv/${cvVersion}`, {
+        responseType: 'blob', // Set the response type to blob to handle binary data (PDF file)
+      });
+
+
+    // Extract the filename from the Content-Disposition header
+
+    const contentDisposition = response.headers['content-disposition'];
+    const match = contentDisposition.match(/filename=(.+)/);
+    const filename = match && match[1];
+
+      // Create a URL object from the blob data
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+  
+      // Create an anchor element to trigger the download
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', filename); // Set the filename for the downloaded file
+      document.body.appendChild(link);
+  
+      // Click the anchor element to start the download
+      link.click();
+  
+      // Clean up by removing the anchor element and revoking the URL object
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error downloading CV:', error);
+      // Handle the error
     }
   };
-  
+
   const formattedDate = new Date(job.date).toLocaleDateString('fr-FR', {
     day: '2-digit',
     month: '2-digit',
@@ -53,6 +75,16 @@ const JobItem: React.FC<JobItemProps> = ({ job, onDelete }) => {
     // navigate(`/job/${job.id}`); // Navigate to the job details page)
   };
 
+  const formatVersion = (version: string) => {
+    // Extract the number from the version string using a regular expression
+    const versionNumber = version.match(/\d+/);
+  
+    // If a number is found, prepend "Version " to it, otherwise return the original version
+    return versionNumber ? `Version ${versionNumber[0]}` : version;
+  };
+  
+  
+
       
   return (
     <tr  onClick={handleRowClick}>
@@ -61,8 +93,8 @@ const JobItem: React.FC<JobItemProps> = ({ job, onDelete }) => {
       <td>{formattedDate}</td>
       <td>{job.ville}</td>
       <td>{job.site}</td>
-      <td onClick={() => openCVLink(job.versionCV)} style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}>
-        {job.versionCV}
+      <td onClick={() => downloadCV(job.versionCV)} style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}>
+        {formatVersion(job.versionCV)}
       </td>
       <td>{job.status}</td>
       <td>

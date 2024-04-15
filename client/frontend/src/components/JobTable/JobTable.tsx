@@ -6,7 +6,6 @@ import { Job } from './JobModel';
 
 import JobList from './JobList'; // Import the JobList component
 
-
 export interface JobTableProps {
   jobs: Job[];
   searchTerm: string; // Add searchTerm prop
@@ -36,26 +35,42 @@ useEffect(() => {
 
 
   // Function to handle form submission
-  const handleSubmit = (newJob: Job) => {
-    // Send new job data to the backend API
-    const { id, ...newJobData } = newJob;
-    axios.post('/api/jobs', newJobData)
-      .then(response => {
-        if (response.status === 201) {
-          console.log('New job added successfully!');
-          // Assuming the response includes the newly created job data,
-          // you can update the UI by adding the new job to the list of jobs
-          const updatedJobs = [...jobs, { ...response.data, id: response.data._id }];
-          console.log(response)
-          setSortedJobs(updatedJobs);
-        } else {
-          console.error('Failed to add new job:', response.statusText);
-        }
-      })
-      .catch(error => {
-        console.error('Error adding new job:', error.message);
-      });
-  };
+const handleSubmit = async (newJob: Job) => { // Add 'async' keyword here
+  // Send new job data to the backend API
+  const { id, ...newJobData } = newJob;
+  try {
+    const response = await axios.post('/api/jobs', newJobData); // Use 'await' here to wait for the response
+    if (response.status === 201) {
+      console.log('New job added successfully!');
+      // Assuming the response includes the newly created job data,
+      // you can update the UI by adding the new job to the list of jobs
+      const updatedJobs = [...jobs, { ...response.data, id: response.data._id }];
+      setSortedJobs(updatedJobs);
+
+      // After adding the job, call the function to generate the CV
+      // await generateCVForJob('' as string, newJobData.versionCV as string);
+      // Explicitly specify the types of newJobData.companyName and newJobData.versionCV as strings
+    } else {
+      console.error('Failed to add new job:', response.statusText);
+    }
+  } catch (error: any) {
+    console.error('Error adding new job:', error.message);
+  }
+};
+
+  // Function to generate CV, could be used in the future, do not delete
+const generateCVForJob = async (companyName: string, versionCV: string) => {
+  try {
+    await axios.post('/api/generate-cv', {
+      companyName,
+      version: versionCV
+    });
+    console.log('CV generated successfully!');
+  } catch (error: any) {
+    console.error('Error generating CV:', error.message);
+    throw error;
+  }
+};
 
   // Function to handle deletion of a job
   const handleDeleteJob = (id: string) => {
