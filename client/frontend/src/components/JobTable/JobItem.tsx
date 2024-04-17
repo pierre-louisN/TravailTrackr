@@ -2,6 +2,9 @@ import React from 'react';
 import { Job } from './JobModel';
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 import axios from 'axios';
+import { useState, useEffect } from 'react';
+import Select from 'react-select'; // Import react-select
+
 
 interface JobItemProps {
   job: Job;
@@ -11,6 +14,38 @@ interface JobItemProps {
 
 const JobItem: React.FC<JobItemProps> = ({ job, onDelete }) => {
 
+  // const [selectedStatus, setSelectedStatus] = useState(job.status); // State to manage selected status
+  const [selectedStatus, setSelectedStatus] = useState<{ value: string; label: string } | null>(null);
+
+  const statusOptions = [
+    { value: 'Postulé(e)', label: 'Postulé(e)' },
+    { value: 'En cours d\'examen', label: 'En cours d\'examen' },
+    { value: 'Entretien planifié', label: 'Entretien planifié' },
+    { value: 'Entretien réalisé', label: 'Entretien réalisé' },
+    { value: 'Offre étendue', label: 'Offre étendue' },
+    { value: 'Offre acceptée', label: 'Offre acceptée' },
+    { value: 'Offre refusée', label: 'Offre refusée' },
+    { value: 'KO', label: 'KO' },
+    // Add more status options as needed
+  ];
+  
+  useEffect(() => {
+    // Set the default value for selectedStatus when the job prop changes
+    setSelectedStatus({ value: job.status, label: job.status });
+  }, [job]);
+  
+
+  const handleStatusChange = async (selectedOption: any, actionMeta: any) => {
+    if (actionMeta.action === 'select-option') {
+      setSelectedStatus(selectedOption);
+      try {
+        await axios.put(`/api/jobs/${job.id}`, { status: selectedOption.value });
+      } catch (error) {
+        console.error('Error updating status:', error);
+      }
+    }
+  };
+  
 
   const downloadCV = async (cvVersion: string) => {
     try {
@@ -82,6 +117,8 @@ const JobItem: React.FC<JobItemProps> = ({ job, onDelete }) => {
     // If a number is found, prepend "Version " to it, otherwise return the original version
     return versionNumber ? `Version ${versionNumber[0]}` : version;
   };
+
+  
   
   
 
@@ -96,7 +133,18 @@ const JobItem: React.FC<JobItemProps> = ({ job, onDelete }) => {
       <td onClick={() => downloadCV(job.versionCV)} style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}>
         {formatVersion(job.versionCV)}
       </td>
-      <td>{job.status}</td>
+      {/* <td>{job.status}</td>
+       */}
+      <td>
+        {/* Searchable dropdown for selecting status */}
+        <Select 
+          value={selectedStatus}
+          onChange={handleStatusChange}
+          options={statusOptions} // Wrap statusOptions in an array
+          isSearchable
+          placeholder="Sélectionnez le statut"
+        />
+      </td>
       <td>
         <button onClick={handleDeleteClick}>Delete</button>
       </td>

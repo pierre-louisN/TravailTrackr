@@ -1,6 +1,7 @@
 import React, { useState, ChangeEvent } from 'react'; // Import React and necessary hooks
 import JobItem from './JobItem';
 import { Job } from './JobModel';
+import Select from 'react-select'; // Import react-select
 
 
 interface JobListProps {
@@ -11,15 +12,26 @@ interface JobListProps {
 
 const JobList: React.FC<JobListProps> = ({ jobs, onSubmit, onDelete }) => {
 
-   const [currentDate, setCurrentDate] = useState(new Date().toISOString().slice(0, 10));
+  const [currentDate, setCurrentDate] = useState(new Date().toISOString().slice(0, 10));
   const [isEditingDate, setIsEditingDate] = useState(false); // State to track if date is being edited
   const initialDate = new Date().toISOString().slice(0, 10); // Get today's date in the required format
   const [formData, setFormData] = useState<Partial<Job>>({
     date: initialDate,
     versionCV: 'version1', // Set default value for versionCV
-    status: 'Envoye', // Set default value for status
+    status: 'Postulé(e)', // Default status value
   });
   const [inputValue, setInputValue] = useState('');
+
+  const statusOptions = [
+    { value: 'Postulé(e)', label: 'Postulé(e)' },
+    { value: 'En cours d\'examen', label: 'En cours d\'examen' },
+    { value: 'Entretien planifié', label: 'Entretien planifié' },
+    { value: 'Entretien réalisé', label: 'Entretien réalisé' },
+    { value: 'Offre étendue', label: 'Offre étendue' },
+    { value: 'Offre acceptée', label: 'Offre acceptée' },
+    { value: 'Offre refusée', label: 'Offre refusée' },
+    { value: 'KO', label: 'KO' },
+  ];
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -96,7 +108,17 @@ const JobList: React.FC<JobListProps> = ({ jobs, onSubmit, onDelete }) => {
       <tbody>
         {/* Form for adding a new job */}
         <tr>
-          <td><input type="text" name="emploi" placeholder="Emploi" value={formData.emploi || ''} onChange={handleInputChange} required /></td>
+          {/* <td><input type="text" name="emploi" placeholder="Emploi" value={formData.emploi || ''} onChange={handleInputChange} required /></td> */}
+          <td>
+            <select name="emploi" value={formData.emploi} onChange={handleInputChange}>
+              <option value="">Select Type</option>
+              <option value="Message Linkedin">Message Linkedin</option>
+              <option value="">Other</option>
+            </select>
+            {formData.emploi !== 'Message Linkedin' && (
+              <input type="text" name="emploi" placeholder="Emploi" value={formData.emploi || ''} onChange={handleInputChange} required />
+            )}
+          </td>
           <td><input type="text" name="lien" placeholder="Lien" value={formData.lien || ''} onChange={handleInputChange} required /></td>
 
           <td 
@@ -127,7 +149,17 @@ const JobList: React.FC<JobListProps> = ({ jobs, onSubmit, onDelete }) => {
           
 
 
-          <td><input type="text" name="ville" placeholder="Ville" value={formData.ville || ''} onChange={handleInputChange} required /></td>
+          {/* <td><input type="text" name="ville" placeholder="Ville" value={formData.ville || ''} onChange={handleInputChange} required /></td> */}
+          <td>
+            <select name="ville" value={formData.ville} onChange={handleInputChange}>
+              <option value="">Select Type</option>
+              <option value="Distanciel">Distanciel</option>
+              <option value="other">Other</option>
+            </select>
+            {formData.ville !== 'distanciel' && (
+              <input type="text" name="ville" placeholder="Ville" value={formData.ville || ''} onChange={handleInputChange} required />
+            )}
+          </td>
           <td><input type="text" name="site" placeholder="Site" value={formData.site || ''} onChange={handleInputChange} required /></td>
           <td>
             <select name="versionCV" value={formData.versionCV || 'version1'} onChange={handleInputChange}>
@@ -136,12 +168,15 @@ const JobList: React.FC<JobListProps> = ({ jobs, onSubmit, onDelete }) => {
               {/* Add more versions as needed */}
             </select>
           </td>
+
           <td>
-            <select name="status" value={formData.status || 'Envoye'} onChange={handleInputChange}>
-              <option value="Envoye">Envoye</option>
-              <option value="Recu">Recu</option>
-              {/* Add more statuses as needed */}
-            </select>
+            <Select
+              value={statusOptions.find(option => option.value === formData.status)}
+              onChange={(selectedOption) => setFormData((prevData) => ({ ...prevData, status: selectedOption?.value || '' }))}
+              options={statusOptions}
+              isSearchable
+              placeholder="Sélectionnez le statut"
+            />
           </td>
           <td><button type="submit" onClick={handleSubmit}>Add Job</button></td>
         </tr>
