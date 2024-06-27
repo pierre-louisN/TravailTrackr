@@ -1,27 +1,86 @@
-import React from 'react';
-import { Job } from './JobModel';
-import { useParams, Link } from 'react-router-dom';
+// frontend/src/components/JobTable/JobDetailsPage.tsx
 
-interface JobDetailsProps {
+import React, { useState, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { getJobNotes, addJobNote } from '../../api/jobApi';
+import { Job, Note } from './JobModel';
+
+interface JobDetailsPageProps {
   jobs: Job[];
 }
 
-const JobDetailsPage: React.FC<JobDetailsProps> = ({ jobs }) => {
-  const { id } = useParams(); // Access the id parameter from the URL
+const JobDetailsPage: React.FC<JobDetailsPageProps> = ({ jobs }) => {
+  const { id } = useParams<{ id: string }>();
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [newNote, setNewNote] = useState('');
 
-  // Retrieve the job with the matching id
   const selectedJob = jobs.find((job) => job.id === id);
+
+  useEffect(() => {
+    const fetchNotes = async () => {
+      try {
+        const notesData = await getJobNotes(id);
+        setNotes(notesData);
+      } catch (error) {
+        console.error('Error fetching notes:', error);
+      }
+    };
+
+    fetchNotes();
+  }, [id]);
 
   if (!selectedJob) {
     return <div>Job not found</div>;
   }
 
+  const handleNewNoteChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setNewNote(event.target.value);
+  };
+
+  const handleAddNote = async () => {
+    if (newNote.trim()) {
+      try {
+        const updatedJob = await addJobNote(id, newNote);
+        setNotes(updatedJob.notes);
+        setNewNote('');
+      } catch (error) {
+        console.error('Error adding note:', error);
+      }
+    }
+  };
+
   return (
     <div>
       <h2>{selectedJob.emploi}</h2>
       <p>{selectedJob.lien}</p>
-      {/* Display more job details here */}
-      \<Link to="/">Back to Job List</Link>
+
+      <div>
+        <h3>Notes:</h3>
+        <ul>
+          {notes.map((note, index) => (
+            <li key={index}>
+              <strong>{new Date(note.createdAt).toLocaleDateString('fr-FR', {
+                day: 'numeric',
+                month: 'short',
+                hour: 'numeric',
+                minute: '2-digit',
+              })}</strong> {note.content}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <textarea
+          value={newNote}
+          onChange={handleNewNoteChange}
+          placeholder="Enter your note here"
+          style={{ width: '80%', height: '100px', resize: 'none' }}
+        />
+        <button onClick={handleAddNote} style={{ marginTop: '10px' }}>Add Note</button>
+      </div>
+
+      <Link to="/">Back to Job List</Link>
     </div>
   );
 };

@@ -2,6 +2,8 @@
 
 const Job = require('../models/jobModel');
 
+const JOB = Job;
+
   const getAllJobs = async (req, res) => {
     try {
       // Fetch all jobs from the database
@@ -31,21 +33,43 @@ const Job = require('../models/jobModel');
   };
   
   const createJob = async (req, res) => {
-    const { emploi, lien, ville, site, versionCV, status } = req.body;
+    // const { emploi, lien, ville, site, versionCV, status } = req.body;
+    // const newJob = new JOB(req.body);
     try {
-      const newJob = await Job.create({ emploi, lien, ville, site, versionCV, status });
+      const newJob = new JOB(req.body);
+      // const newJob = await Job.create({ emploi, lien, ville, site, versionCV, status });
+      await newJob.save();
       res.status(201).json(newJob);
+
+      console.log('Job created successfully:', newJob);
     } catch (error) {
       console.error('Error creating job:', error);
       res.status(500).json({ message: 'Internal server error' });
     }
   };
   
+  // const updateJob = async (req, res) => {
+  //   const jobId = req.params.id;
+  //   const { emploi, lien, ville, site, versionCV, status } = req.body;
+  //   try {
+  //     const updatedJob = await Job.findByIdAndUpdate(jobId, { emploi, lien, ville, site, versionCV, status }, { new: true });
+  //     if (!updatedJob) {
+  //       return res.status(404).json({ message: 'Job not found' });
+  //     }
+  //     res.status(200).json(updatedJob);
+  //   } catch (error) {
+  //     console.error('Error updating job:', error);
+  //     res.status(500).json({ message: 'Internal server error' });
+  //   }
+  // };
+  
+
   const updateJob = async (req, res) => {
     const jobId = req.params.id;
-    const { emploi, lien, ville, site, versionCV, status } = req.body;
+    const updatedData = req.body;
+  
     try {
-      const updatedJob = await Job.findByIdAndUpdate(jobId, { emploi, lien, ville, site, versionCV, status }, { new: true });
+      const updatedJob = await Job.findByIdAndUpdate(jobId, updatedData, { new: true });
       if (!updatedJob) {
         return res.status(404).json({ message: 'Job not found' });
       }
@@ -69,6 +93,43 @@ const Job = require('../models/jobModel');
       res.status(500).json({ message: 'Internal server error' });
     }
   };
+
+
+  // New function to get notes from a specific job
+const getJobNotes = async (req, res) => {
+  const jobId = req.params.id;
+  try {
+    const job = await Job.findById(jobId);
+    if (!job) {
+      console.log('job not found')
+      return res.status(404).json({ message: 'Job not found' });
+    }
+    res.status(200).json(job.notes);
+  } catch (error) {
+    console.error('Error fetching job notes:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+  const addNoteToJob = async (req, res) => {
+    const jobId = req.params.id;
+    const { content } = req.body;
+  
+    try {
+      const job = await Job.findById(jobId);
+      if (!job) {
+        return res.status(404).json({ message: 'Job not found' });
+      }
+  
+      job.notes.push({ content });
+      await job.save();
+  
+      res.status(200).json(job);
+    } catch (error) {
+      console.error('Error adding note to job:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  };
   
   module.exports = {
     getAllJobs,
@@ -76,5 +137,7 @@ const Job = require('../models/jobModel');
     createJob,
     updateJob,
     deleteJob,
+    getJobNotes,
+    addNoteToJob
   };
   

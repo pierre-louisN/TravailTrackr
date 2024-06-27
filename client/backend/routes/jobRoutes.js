@@ -1,7 +1,7 @@
 // src/routes.js
 const express = require('express');
 const router = express.Router();
-const { getAllJobs, getJobById, createJob, updateJob, deleteJob } = require('../controllers/jobController'); // Create this file
+const { getAllJobs, getJobById, createJob, updateJob, deleteJob, addNoteToJob, getJobNotes } = require('../controllers/jobController'); // Create this file
 const { generateNewCV, downloadCV } = require('../services/cvService'); // Import the generateCV function
 
 
@@ -10,7 +10,9 @@ router.get('/jobs/:id', getJobById);
 router.post('/jobs', createJob);
 router.put('/jobs/:id', updateJob);
 router.delete('/jobs/:id', deleteJob);
-
+router.post('/jobs/:id/notes', addNoteToJob);
+router.get('/jobs/:id/notes', getJobNotes);
+// router.put('/jobs/:id/notes', updateJobNotes);
 
 
 // Define route for generating CVs

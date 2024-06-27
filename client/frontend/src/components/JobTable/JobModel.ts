@@ -9,4 +9,11 @@ export interface Job {
     site: string;
     versionCV: string;
     status: string;
+    notes: Note[];
+  }
+
+
+  export interface Note {
+    createdAt: string;
+    content: string;
   }

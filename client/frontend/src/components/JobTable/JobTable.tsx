@@ -16,8 +16,22 @@ const JobTable: React.FC<JobTableProps> = ({ searchTerm, jobs }) => {
   // State to manage sorting and jobs data
 const [sortedJobs, setSortedJobs] = useState<Job[]>([]); // State for sorted jobs
 
+// Inside your JobTable component
+const [jobsAddedLast24Hours, setJobsAddedLast24Hours] = useState(0);
+
 useEffect(() => {
-  setSortedJobs(jobs); // Update sortedJobs with the initial jobs array
+  const currentDate = new Date();
+  const twentyFourHoursAgo = new Date(currentDate.getTime() - 24 * 60 * 60 * 1000);
+
+  const jobsAddedInLast24Hours = jobs.filter(job => new Date(job.date) > twentyFourHoursAgo);
+  setJobsAddedLast24Hours(jobsAddedInLast24Hours.length);
+}, [jobs]);
+
+useEffect(() => {
+  // Sort jobs by date 
+  const sortedJobs = [...jobs].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  setSortedJobs(sortedJobs);
+  // setSortedJobs(jobs); // Update sortedJobs with the initial jobs array
 }, [jobs]); // Run this effect whenever jobs prop changes
 
   // Function to handle sorting by date
@@ -99,6 +113,9 @@ return (
       <JobList jobs={sortedJobs} onSubmit={handleSubmit} onDelete={handleDeleteJob} />
       {/* Display total number of jobs */}
       <div className="counter">Total Jobs: {jobs.length}</div>
+      
+      {/* Display number of jobs added in the last 24 hours */}
+      <div className="counter">Jobs Added in Last 24 Hours: {jobsAddedLast24Hours}</div>
     </JobTableWrapper>
   </div>
 );

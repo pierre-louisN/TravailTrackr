@@ -30,7 +30,17 @@ const jobSchema = new mongoose.Schema({
   status: {
     type: String,
     required: true
-  }
+  }, 
+  notes: [{
+    content: {
+      type: String,
+      required: false
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now
+    }
+  }]
 });
 
 // Specify the collection name

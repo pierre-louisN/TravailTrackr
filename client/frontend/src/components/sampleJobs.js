@@ -11,6 +11,7 @@ const sampleJobs = [
         site: 'Company1',
         versionCV: 'v1',
         status: 'Applied',
+        notes : []
       },
       {
         id: '2',
@@ -21,6 +22,7 @@ const sampleJobs = [
         site: 'Company2',
         versionCV: 'v2',
         status: 'Interview Scheduled',
+        notes : []
       },
       {
         id: '3',
@@ -31,6 +33,7 @@ const sampleJobs = [
         site: 'Company3',
         versionCV: 'v3',
         status: 'Offer Extended',
+        notes : []
       },
       // Add more job objects as needed
     ];     
