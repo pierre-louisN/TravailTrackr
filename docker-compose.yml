@@ -1,0 +1,52 @@
+# version: '3.8' , is obsolete in Docker Compose
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    command: 
+      - '--logpath'
+      - '/var/log/mongodb/mongod.log'
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - app-network
+
+  backend:
+    build: ./client/backend   # Path to your backend Dockerfile
+    ports:
+      - "8080:8080"           # Expose backend on host port 8080
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/job-manager  # MongoDB connection URI
+    depends_on:
+      - mongo                 # Ensure MongoDB is started before backend
+    networks:
+      - app-network           # Attach to the app-network
+    volumes:
+      - ./client/backend:/usr/src/app  # Mount backend code into container
+      - /usr/src/app/node_modules       # Mount node_modules for caching
+
+  frontend:
+    build: ./client/frontend  # Path to your frontend Dockerfile
+    ports:
+      - "3000:3000"           # Expose frontend on host port 3000
+    environment:
+    - CHOKIDAR_USEPOLLING=true  # Ensure polling is enabled
+    - WATCHPACK_POLLING=true
+    depends_on:
+      - backend               # Ensure backend is started before frontend
+    networks:
+      - app-network           # Attach to the app-network
+    volumes:
+      - ./client/frontend:/app  # Mount frontend code into container
+      - /usr/src/app/node_modules       # Mount node_modules for caching
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mongo-data:
+    driver: local

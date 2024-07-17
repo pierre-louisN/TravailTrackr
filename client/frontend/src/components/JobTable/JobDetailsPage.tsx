@@ -5,6 +5,7 @@ import { useParams, Link } from 'react-router-dom';
 import { getJobNotes, addJobNote } from '../../api/jobApi';
 import { Job, Note } from './JobModel';
 
+
 interface JobDetailsPageProps {
   jobs: Job[];
 }
@@ -15,6 +16,8 @@ const JobDetailsPage: React.FC<JobDetailsPageProps> = ({ jobs }) => {
   const [newNote, setNewNote] = useState('');
 
   const selectedJob = jobs.find((job) => job.id === id);
+
+ 
 
   useEffect(() => {
     const fetchNotes = async () => {
@@ -49,24 +52,32 @@ const JobDetailsPage: React.FC<JobDetailsPageProps> = ({ jobs }) => {
     }
   };
 
+  if (!selectedJob) {
+    return <div>Job not found</div>;
+  }
+
   return (
     <div>
       <h2>{selectedJob.emploi}</h2>
-      <p>{selectedJob.lien}</p>
-
+      {/* <p>{selectedJob.lien}</p> */}
+      <p>
+        <Link to={selectedJob.lien} target="_blank">{selectedJob.lien}</Link>
+      </p>
       <div>
         <h3>Notes:</h3>
         <ul>
-          {notes.map((note, index) => (
-            <li key={index}>
-              <strong>{new Date(note.createdAt).toLocaleDateString('fr-FR', {
-                day: 'numeric',
-                month: 'short',
-                hour: 'numeric',
-                minute: '2-digit',
-              })}</strong> {note.content}
-            </li>
-          ))}
+          <div style={{ whiteSpace: 'pre-line' }}> 
+            {notes.map((note, index) => (
+              <li key={index}>
+                <strong>{new Date(note.createdAt).toLocaleDateString('fr-FR', {
+                  day: 'numeric',
+                  month: 'short',
+                  hour: 'numeric',
+                  minute: '2-digit',
+                })}</strong> {note.content}
+              </li>
+            ))}
+          </div>
         </ul>
       </div>
 

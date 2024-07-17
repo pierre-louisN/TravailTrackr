@@ -2,8 +2,8 @@ const fs = require('fs');
 const path = require('path');
 
 // Path to the CV repository
-const { cvRepositoryPath } = require('../../config');
-const { defaultCVNames } = require('../../config');
+const { cvRepositoryPath } = require('../config');
+const { defaultCVNames } = require('../config');
 
 // function that could be used in the future to generate a new CV upon job creation, maybe using Overleaf API
 const generateNewCV = async (companyName, version) => {

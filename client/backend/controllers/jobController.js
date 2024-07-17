@@ -6,6 +6,7 @@ const JOB = Job;
 
   const getAllJobs = async (req, res) => {
     try {
+      console.log('get all jobs');
       // Fetch all jobs from the database
       const jobs = await Job.find();
 

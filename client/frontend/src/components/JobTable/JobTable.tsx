@@ -110,8 +110,11 @@ return (
   <div className="job-table">
     <SearchBar onSearch={handleSearch} />
     <JobTableWrapper data-testid="JobTable">
-      <JobList jobs={sortedJobs} onSubmit={handleSubmit} onDelete={handleDeleteJob} />
-      {/* Display total number of jobs */}
+      {sortedJobs.length === 0 ? (
+          <p>No jobs to display</p>
+        ) : (
+          <JobList jobs={sortedJobs} onSubmit={handleSubmit} onDelete={handleDeleteJob} />
+      )}
       <div className="counter">Total Jobs: {jobs.length}</div>
       
       {/* Display number of jobs added in the last 24 hours */}

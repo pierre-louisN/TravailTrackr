@@ -1,11 +1,8 @@
-const cors = require('cors');
+// backend/index.js
 
+const server = require('./server');
 
-const app = require('./server');
-
-app.use(cors());
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+const PORT = process.env.PORT || 8080;
+server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
