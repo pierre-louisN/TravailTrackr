@@ -1,9 +1,9 @@
 import React from 'react';
 import { Job } from './JobModel';
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom
-import axios from 'axios';
 import { useState, useEffect } from 'react';
 import Select from 'react-select'; // Import react-select
+import { updateJobStatus, downloadCV  } from '../../api/jobApi';
 
 
 interface JobItemProps {
@@ -35,47 +35,66 @@ const JobItem: React.FC<JobItemProps> = ({ job, onDelete }) => {
   }, [job]);
   
 
+  // const handleStatusChange = async (selectedOption: any, actionMeta: any) => {
+  //   if (actionMeta.action === 'select-option') {
+  //     setSelectedStatus(selectedOption);
+  //     try {
+  //       await axios.put(`/api/jobs/${job.id}`, { status: selectedOption.value });
+  //     } catch (error) {
+  //       console.error('Error updating status:', error);
+  //     }
+  //   }
+  // };
+  
   const handleStatusChange = async (selectedOption: any, actionMeta: any) => {
     if (actionMeta.action === 'select-option') {
       setSelectedStatus(selectedOption);
       try {
-        await axios.put(`/api/jobs/${job.id}`, { status: selectedOption.value });
+        await updateJobStatus(job.id, selectedOption.value);
       } catch (error) {
         console.error('Error updating status:', error);
       }
     }
   };
-  
 
-  const downloadCV = async (cvVersion: string) => {
+  // const downloadCV = async (cvVersion: string) => {
+  //   try {
+  //     // Make a GET request to the backend route to download the CV
+  //     const response = await axios.get(`/api/download-cv/${cvVersion}`, {
+  //       responseType: 'blob', // Set the response type to blob to handle binary data (PDF file)
+  //     });
+
+
+  //   // Extract the filename from the Content-Disposition header
+
+  //   const contentDisposition = response.headers['content-disposition'];
+  //   const match = contentDisposition.match(/filename=(.+)/);
+  //   const filename = match && match[1];
+
+  //     // Create a URL object from the blob data
+  //     const url = window.URL.createObjectURL(new Blob([response.data]));
+  
+  //     // Create an anchor element to trigger the download
+  //     const link = document.createElement('a');
+  //     link.href = url;
+  //     link.setAttribute('download', filename); // Set the filename for the downloaded file
+  //     document.body.appendChild(link);
+  
+  //     // Click the anchor element to start the download
+  //     link.click();
+  
+  //     // Clean up by removing the anchor element and revoking the URL object
+  //     document.body.removeChild(link);
+  //     window.URL.revokeObjectURL(url);
+  //   } catch (error) {
+  //     console.error('Error downloading CV:', error);
+  //     // Handle the error
+  //   }
+  // };
+
+  const getCV = async (cvVersion: string) => {
     try {
-      // Make a GET request to the backend route to download the CV
-      const response = await axios.get(`/api/download-cv/${cvVersion}`, {
-        responseType: 'blob', // Set the response type to blob to handle binary data (PDF file)
-      });
-
-
-    // Extract the filename from the Content-Disposition header
-
-    const contentDisposition = response.headers['content-disposition'];
-    const match = contentDisposition.match(/filename=(.+)/);
-    const filename = match && match[1];
-
-      // Create a URL object from the blob data
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-  
-      // Create an anchor element to trigger the download
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', filename); // Set the filename for the downloaded file
-      document.body.appendChild(link);
-  
-      // Click the anchor element to start the download
-      link.click();
-  
-      // Clean up by removing the anchor element and revoking the URL object
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
+      await downloadCV(cvVersion);
     } catch (error) {
       console.error('Error downloading CV:', error);
       // Handle the error
@@ -117,8 +136,6 @@ const JobItem: React.FC<JobItemProps> = ({ job, onDelete }) => {
     // If a number is found, prepend "Version " to it, otherwise return the original version
     return versionNumber ? `Version ${versionNumber[0]}` : version;
   };
-
-  
   
   
 
@@ -130,7 +147,7 @@ const JobItem: React.FC<JobItemProps> = ({ job, onDelete }) => {
       <td>{formattedDate}</td>
       <td>{job.ville}</td>
       <td>{job.site}</td>
-      <td onClick={() => downloadCV(job.versionCV)} style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}>
+      <td onClick={() => getCV(job.versionCV)} style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}>
         {formatVersion(job.versionCV)}
       </td>
       {/* <td>{job.status}</td>

@@ -43,6 +43,7 @@ const downloadCV = async (cvVersion, res) => {
   try {
     const currentDate = new Date().toISOString().slice(0, 10); // Get current date in YYYY-MM-DD format
     const cvFileName = defaultCVNames[cvVersion];
+  
     if (!cvFileName) {
       throw new Error('Invalid CV version');
     }
@@ -54,6 +55,7 @@ const downloadCV = async (cvVersion, res) => {
     
 
     const fileNameDated = `${cvFileName}_${currentDate}.pdf`;
+    console.log(cvFilePath);
      // Check if the file exists
      if (fs.existsSync(cvFilePath)) {
       // Set the appropriate headers for file download

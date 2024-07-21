@@ -38,7 +38,7 @@ describe('Job Routes Integration Tests', () => {
   describe('Axios Test', () => {
     it('should make a successful request to a backend route', async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/jobs');
+        const response = await axios.get('/api/jobs');
         expect(response.status).toBe(200); // Assuming the route returns a 200 status
         // Add more assertions as needed to validate the response data
       } catch (error) {

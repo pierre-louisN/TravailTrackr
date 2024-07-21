@@ -15,21 +15,19 @@ function App() {
   // Sample job data (replace with your actual data)
 
   const [jobs, setJobs] = useState([]);
-  
-  useEffect(() => {
+
+  useEffect(() => { // will be called twice in Strict mode in development 
     const fetchJobsData = async () => {
       try {
         const jobsData = await fetchJobs();
-        console.log(jobsData);
         setJobs(jobsData);
       } catch (error) {
         console.error('Error fetching jobs:', error);
       }
     };
-  
+
     fetchJobsData();
   }, []);
-
 
   return (
     <Router>
@@ -38,7 +36,7 @@ function App() {
         <Link to="/">Home</Link>
       </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>   
-          <SearchButton link="https://www.linkedin.com/jobs/search/?currentJobId=3884346676&f_E=2&f_TPR=r604800&f_WT=2&keywords=D%C3%A9veloppeur&origin=JOB_SEARCH_PAGE_JOB_FILTER&refresh=true" buttonText="Search on LinkedIn for 'Developpeur'" />
+          <SearchButton link="https://www.linkedin.com/jobs/search/?currentJobId=3977217702&distance=25&f_E=2&f_TPR=r604800&f_WT=2&geoId=105015875&keywords=D%C3%A9veloppeur&origin=JOB_SEARCH_PAGE_JOB_FILTER&refresh=true" buttonText="Search on LinkedIn for 'Developpeur'" />
           <SearchButton link="https://www.linkedin.com/jobs/search/?currentJobId=3879309420&f_E=2&f_TPR=r604800&f_WT=2&geoId=105015875&keywords=Ing%C3%A9nieur&location=France&origin=JOB_SEARCH_PAGE_KEYWORD_AUTOCOMPLETE&refresh=true" buttonText="Search on LinkedIn for 'Ingenieur'" />
           <SearchButton link="https://fr.indeed.com/emplois?q=d%C3%A9veloppeur&sc=0bf%3Aexrec%28%29%2Ckf%3Aattr%28DSQF7%29jt%28permanent%29%3B&fromage=7&vjk=55d29b161267e576" buttonText="Search on Indeed for 'Developpeur'" />
           <SearchButton link="https://fr.indeed.com/emplois?q=Ingenieur+OR+engineer&sc=0bf%3Aexrec%28%29%2Ckf%3Aattr%28DSQF7%29jt%28permanent%29%3B&fromage=7&vjk=1d4efc57e7a904cc" buttonText="Search on Indeed for 'Ingenieur'" />
@@ -52,8 +50,8 @@ function App() {
           <SearchButton link="https://docs.google.com/document/d/1JjB9ErbrD_OA56nlYNbHlhzrKqebAWvIVeULSbjOYTY/edit" buttonText="Preparation entretien" />
           <SearchButton link="https://leetcode.com/problem-list/p8ibwjpv/" buttonText="Leetcode Problems" />
           <SearchButton link="https://chatgpt.com/c/45522194-4ab9-435c-9510-4b478374f403" buttonText="Cover Letter Chat GPT'" />
-          <SearchButton link="https://fr.overleaf.com/project/65b91ff64a8e84e449c09ca0" buttonText="Cover Letter Google Docs'" />
-          <SearchButton link="https://docs.google.com/document/d/1JjB9ErbrD_OA56nlYNbHlhzrKqebAWvIVeULSbjOYTY/edit" buttonText="Prepare interview" />
+          <SearchButton link="https://fr.overleaf.com/project/65b91ff64a8e84e449c09ca0" buttonText="Cover Letter Overleaf'" />
+          <SearchButton link="https://docs.google.com/document/d/1qxdujzwpfhgD0oi0UhpqXNeFa0-Kk_BihmLGl62ZyzE/edit#heading=h.l0a31ac5f3gg" buttonText="Projets details" />
           {/* <SearchButton link="https://example.com" buttonText="Search Example" /> */}
           <SearchButton link="https://mail.google.com/mail/u/0/d/AEoRXRQA45IbqywlIXdH349tykZ4HS7hXe3s9Acm06pA9xanfak-/" buttonText="Boite Mail" />
         

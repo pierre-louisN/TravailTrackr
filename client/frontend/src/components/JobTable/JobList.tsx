@@ -17,7 +17,7 @@ const JobList: React.FC<JobListProps> = ({ jobs, onSubmit, onDelete }) => {
   const initialDate = new Date().toISOString().slice(0, 10); // Get today's date in the required format
   const [formData, setFormData] = useState<Partial<Job>>({
     date: initialDate,
-    versionCV: 'version2', // Set default value for versionCV
+    versionCV: 'Developer', // Set default value for versionCV
     status: 'Postulé(e)', // Default status value
   });
   const [inputValue, setInputValue] = useState('');
@@ -123,12 +123,6 @@ const JobList: React.FC<JobListProps> = ({ jobs, onSubmit, onDelete }) => {
           <td><input type="text" name="lien" placeholder="Lien" value={formData.lien || ''} onChange={handleInputChange} required /></td>
 
           <td 
-          // onClick={() => setIsEditingDate(true)} onBlur={handleDateBlur} tabIndex={0}>
-          //   {isEditingDate ? (
-          //     <input type="date" name="date" value={formData.date || initialDate} onChange={handleInputChange} />
-          //   ) : (
-          //     new Date(formData.date as string).toLocaleDateString() || new Date(initialDate).toLocaleDateString()
-          //   )}
           onClick={handleDateClick}>
             {isEditingDate ? (
               <input
@@ -146,11 +140,6 @@ const JobList: React.FC<JobListProps> = ({ jobs, onSubmit, onDelete }) => {
               />
             )}
           </td>
-
-          
-
-
-          {/* <td><input type="text" name="ville" placeholder="Ville" value={formData.ville || ''} onChange={handleInputChange} required /></td> */}
           <td>
             <select name="ville" value={formData.ville} onChange={handleInputChange}>
               <option value="">Select Type</option>
@@ -164,9 +153,10 @@ const JobList: React.FC<JobListProps> = ({ jobs, onSubmit, onDelete }) => {
           <td><input type="text" name="site" placeholder="Site" value={formData.site || ''} onChange={handleInputChange} required /></td>
           <td>
             <select name="versionCV" value={formData.versionCV || 'version1'} onChange={handleInputChange}>
-              <option value="version1">Version 1</option>
-              <option value="version2">Version 2</option>
-              <option value="version3">Version 3</option>
+              <option value="Fullstack">Fullstack</option>
+              <option value="Network">Network</option>
+              <option value="DevOps">DevOps</option>
+              <option value="English">English</option>
               {/* Add more versions as needed */}
             </select>
           </td>
