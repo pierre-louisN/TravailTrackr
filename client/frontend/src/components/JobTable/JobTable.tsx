@@ -28,7 +28,17 @@ useEffect(() => {
 
 useEffect(() => {
   // Sort jobs by date 
-  const sortedJobs = [...jobs].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  // const sortedJobs = [...jobs].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  
+    // Sort jobs by date and second
+    const sortedJobs = [...jobs].sort((a, b) => {
+      if (new Date(a.date).getTime() !== new Date(b.date).getTime()) {
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
+      }
+      // if day iis the same compare the seconds 
+      return new Date(b.date).getSeconds() - new Date(a.date).getSeconds();
+    });
+
   setSortedJobs(sortedJobs);
   // setSortedJobs(jobs); // Update sortedJobs with the initial jobs array
 }, [jobs]); // Run this effect whenever jobs prop changes
@@ -41,14 +51,14 @@ useEffect(() => {
   // };
 
   const handleSearch = (searchTerm: string) => {
-    const filteredJobs = jobs.filter((job) => 
+    const filteredJobs = jobs.filter((job) =>
       job.emploi.toLowerCase().includes(searchTerm.toLowerCase()) ||
       job.site.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (job.lien?.toLowerCase()?.includes(searchTerm.toLowerCase()) ?? false) ||
       job.status.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setSortedJobs(filteredJobs);
   };
-
 //   // Function to handle form submission
 // const handleSubmit = async (newJob: Job) => { // Add 'async' keyword here
 //   // Send new job data to the backend API

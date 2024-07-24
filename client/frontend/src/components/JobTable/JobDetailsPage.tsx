@@ -20,9 +20,11 @@ const JobDetailsPage: React.FC<JobDetailsPageProps> = ({ jobs }) => {
  
 
   useEffect(() => {
+
     const fetchNotes = async () => {
       try {
         const notesData = await getJobNotes(id);
+        
         setNotes(notesData);
       } catch (error) {
         console.error('Error fetching notes:', error);
