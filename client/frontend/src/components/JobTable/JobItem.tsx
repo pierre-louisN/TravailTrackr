@@ -18,7 +18,7 @@ const JobItem: React.FC<JobItemProps> = ({ job, onDelete }) => {
   const [selectedStatus, setSelectedStatus] = useState<{ value: string; label: string } | null>(null);
 
   const statusOptions = [
-    { value: 'Postulé(e)', label: 'Postulé(e)' },
+    { value: 'Postulé', label: 'Postulé' },
     { value: 'En cours d\'examen', label: 'En cours d\'examen' },
     { value: 'Entretien planifié', label: 'Entretien planifié' },
     { value: 'Entretien réalisé', label: 'Entretien réalisé' },
