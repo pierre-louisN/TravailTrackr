@@ -153,7 +153,7 @@ const JobList: React.FC<JobListProps> = ({ jobs, onSubmit, onDelete }) => {
           <td><input type="text" name="site" placeholder="Site" value={formData.site || ''} onChange={handleInputChange} required /></td>
           <td>
             <select name="versionCV" value={formData.versionCV || 'Developer'} onChange={handleInputChange}>
-              <option value="Fullstack">Fullstack</option>
+              <option value="Developer">Developer</option>
               <option value="Network">Network</option>
               <option value="DevOps">DevOps</option>
               <option value="English">English</option>

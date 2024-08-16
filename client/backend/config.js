@@ -9,6 +9,7 @@ module.exports = {
         DevOps: 'CV_pierre_louis_nohet_devops', 
         Network: 'CV_pierre_louis_nohet_network', 
         Developer: 'CV_pierre_louis_nohet_developer',
+        Fullstack: 'CV_pierre_louis_nohet_developer',
         English: 'CV_pierre_louis_nohet_eng'
     }
 };

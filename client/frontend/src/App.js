@@ -53,7 +53,7 @@ function App() {
           <SearchButton link="https://fr.overleaf.com/project/65b91ff64a8e84e449c09ca0" buttonText="Cover Letter Overleaf'" />
           <SearchButton link="https://docs.google.com/document/d/1qxdujzwpfhgD0oi0UhpqXNeFa0-Kk_BihmLGl62ZyzE/edit#heading=h.l0a31ac5f3gg" buttonText="Projets details" />
           {/* <SearchButton link="https://example.com" buttonText="Search Example" /> */}
-          <SearchButton link="https://mail.google.com/mail/u/0/d/AEoRXRQA45IbqywlIXdH349tykZ4HS7hXe3s9Acm06pA9xanfak-/" buttonText="Boite Mail" />
+          <SearchButton link="https://mail.google.com/mail/u/0/d/AEoRXRQA45IbqywlIXdH349tykZ4HS7hXe3s9Acm06pA9xanfak-/#inbox" buttonText="Boite Mail" />
           <SearchButton link="https://chatgpt.com/c/b02722d1-3ed1-402c-a881-383cc4b98a44" buttonText="Retour entretien" />
         
         </div>
